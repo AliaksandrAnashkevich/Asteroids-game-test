@@ -1,52 +1,52 @@
 package com.vizor.asteroids.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.vizor.asteroids.AsteroidsGame;
+import com.vizor.asteroids.actor.BackgroundActor;
 
 public abstract class BaseScreen implements Screen, InputProcessor {
 
-    private final Stage mainStage;
-    private final Stage uiStage;
+    private final AsteroidsGame game;
+    private final Stage stage;
 
-    public BaseScreen() {
-        uiStage = new Stage();
-        mainStage = new Stage();
-
+    public BaseScreen(AsteroidsGame game) {
+        this.game = game;
+        stage = new Stage();
     }
 
-    public Stage getMainStage() {
-        return mainStage;
+    public AsteroidsGame getGame() {
+        return game;
     }
 
-    public Stage getUiStage() {
-        return uiStage;
+    public Stage getStage() {
+        return stage;
     }
 
     @Override
     public void render(float dt) {
-        mainStage.act(dt);
-        uiStage.act(dt);
+        stage.act(dt);
         update(dt);
         ScreenUtils.clear(0, 0, 0, 1);
-        mainStage.draw();
-        uiStage.draw();
+        stage.draw();
     }
 
     public void initialize() {
-        mainStage.getActors().clear();
-        uiStage.getActors().clear();
+        stage.getActors().clear();
+
+        new BackgroundActor(getStage());
     }
 
     public abstract void update(float dt);
 
     @Override
     public void resize(int width, int height) {
-        stageResize(mainStage, width, height);
-        stageResize(uiStage, width, height);
+        stageResize(stage, width, height);
     }
 
     @Override
@@ -61,16 +61,14 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     public void show() {
         InputMultiplexer im = (InputMultiplexer) Gdx.input.getInputProcessor();
         im.addProcessor(this);
-        im.addProcessor(uiStage);
-        im.addProcessor(mainStage);
+        im.addProcessor(stage);
     }
 
     @Override
     public void hide() {
         InputMultiplexer im = (InputMultiplexer) Gdx.input.getInputProcessor();
         im.removeProcessor(this);
-        im.removeProcessor(uiStage);
-        im.removeProcessor(mainStage);
+        im.removeProcessor(stage);
     }
 
     @Override
@@ -114,8 +112,7 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     }
 
     public void dispose() {
-        mainStage.dispose();
-        uiStage.dispose();
+        stage.dispose();
     }
 
     private void stageResize(Stage stage, int width, int height) {
@@ -123,9 +120,7 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         stage.getCamera().viewportWidth = width;
         stage.getCamera().viewportHeight = height;
         stage.getCamera().position
-            .set(stage.getCamera().viewportWidth / 2, getMainStage().getCamera().viewportHeight / 2, 0);
+            .set(stage.getCamera().viewportWidth / 2, getStage().getCamera().viewportHeight / 2, 0);
         stage.getCamera().update();
     }
-
-
 }

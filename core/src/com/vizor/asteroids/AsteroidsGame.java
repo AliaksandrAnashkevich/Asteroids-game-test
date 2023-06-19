@@ -3,43 +3,41 @@ package com.vizor.asteroids;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.vizor.asteroids.screen.BaseScreen;
-import com.vizor.asteroids.screen.GameOverScreen;
 import com.vizor.asteroids.screen.GameIntroScreen;
+import com.vizor.asteroids.screen.GameOverScreen;
 import com.vizor.asteroids.screen.GameScreen;
 
 public class AsteroidsGame extends Game {
 
-    private static AsteroidsGame instance;
     private GameScreen gameScreen;
     private GameIntroScreen gameIntroScreen;
     private GameOverScreen gameOverScreen;
 
-    private AsteroidsGame(){
-    }
-
-    public static AsteroidsGame getInstance() {
-        if (instance == null) {
-            instance = new AsteroidsGame();
-        }
-        return instance;
-    }
-
+    @Override
     public void create() {
-        instance = this;
-
         InputMultiplexer im = new InputMultiplexer();
         Gdx.input.setInputProcessor(im);
 
-        gameScreen = GameScreen.getInstance();
-        gameIntroScreen = GameIntroScreen.getInstance();
-        gameOverScreen = GameOverScreen.getInstance();
-        setGameScreen(gameIntroScreen);
+        gameScreen = new GameScreen(this);
+        gameIntroScreen = new GameIntroScreen(this);
+        gameOverScreen = new GameOverScreen(this);
+        setGameIntroScreen();
     }
 
-    public void setGameScreen(BaseScreen baseScreen) {
-        baseScreen.initialize();
-        setScreen(baseScreen);
+    public void setGameIntroScreen() {
+        gameIntroScreen.initialize();
+        setScreen(gameIntroScreen);
+    }
+
+    public void setGameScreen() {
+        gameScreen.initialize();
+        setScreen(gameScreen);
+    }
+
+    public void setGameOverScreen(int score) {
+        gameOverScreen.initialize();
+        gameOverScreen.setScore(score);
+        setScreen(gameOverScreen);
     }
 
     @Override

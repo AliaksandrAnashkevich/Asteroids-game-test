@@ -9,6 +9,6 @@ public class DesktopLauncher {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setForegroundFPS(60);
         config.setTitle("AsteroidsGame");
-        new Lwjgl3Application(AsteroidsGame.getInstance(), config);
+        new Lwjgl3Application(new AsteroidsGame(), config);
     }
 }

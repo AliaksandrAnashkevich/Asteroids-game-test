@@ -7,34 +7,25 @@ import com.vizor.asteroids.actor.TextActor;
 
 public class GameOverScreen extends BaseScreen {
 
-    private static GameOverScreen instance;
     private TextActor gameOverMessage;
     private TextActor scoreMessage;
     private TextActor pressAnyKeyMessage;
 
-    private GameOverScreen() {
-        super();
-    }
-
-    public static GameOverScreen getInstance() {
-        if (instance == null) {
-            instance = new GameOverScreen();
-        }
-        return instance;
+    public GameOverScreen(AsteroidsGame game) {
+        super(game);
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        gameOverMessage = new TextActor(getUiStage());
+
+        gameOverMessage = new TextActor(getStage());
         gameOverMessage.setText("ASTEROIDS");
 
-        pressAnyKeyMessage = new TextActor(getUiStage());
-        pressAnyKeyMessage.setText("PRESS ANY KEY TO START");
+        pressAnyKeyMessage = new TextActor(getStage());
+        pressAnyKeyMessage.setText("PRESS ANY KEY TO CONTINUE");
 
-        scoreMessage = new TextActor(getUiStage());
-
-        new BackgroundActor(getMainStage());
+        scoreMessage = new TextActor(getStage());
     }
 
     @Override
@@ -50,7 +41,7 @@ public class GameOverScreen extends BaseScreen {
 
     @Override
     public boolean keyDown(int keycode) {
-        AsteroidsGame.getInstance().setGameScreen(GameIntroScreen.getInstance());
+        getGame().setGameIntroScreen();
         return true;
     }
 
